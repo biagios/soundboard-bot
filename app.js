@@ -13,6 +13,7 @@ try {
 const client = new Discord.Client()
 const talkedRecently = new Set()
 const config = require('./config.json')
+var airhorn
 
 const games = ['with Dr. Freeman', 'Half Life 3', config.prefix + 'help', 'please send ' + config.prefix + 'help', 'with a baguette', 'with you ;)', 'with [slem], he is cool', 'with some code', 'with like 2 people idfk man', 'i am not funny', '🤔 🔫  ', 'stop using other bots.', 'Stop using mee6 and actually right clikc and ban people you lazy fuck', 'Litteraly the best bot out there.', 'gradientforest.com', 'sleme.github.com/porn', 'pineappledoesnotgoonpizza.com', `Okay, let's get this straight. If you put pineapple on your pizza you deserve to be punished.`, `STOP PUTTING PINEAPPLE ON PIZZA`, `I didn't think I would neeed to uh, touch on this subject or even mention it. I obviously don't want to touch on sensitive subjects, politics, social movements or religion, but this has gone too far. Please uhh, take it as a life lesson.`]
 setInterval(function () {
@@ -55,7 +56,7 @@ client.on('message', async message => {
   if (command === 'fuck'){
     if (message.member.voiceChannel) {
       message.member.voiceChannel.join().then(connection => {
-      airhorn = connection;
+      airhorn = connection
       const dispatcher = airhorn.playFile('/audio/airhorn.mp3')
       dispatcher.on('error', e => {console.log(e);})
       dispatcher.on('end', () => {message.member.voiceChannel.leave()});
