@@ -20,7 +20,7 @@ setInterval(function () {
   client.user.setGame(rangame)
 }, 60000 * 5)
 
-client.on('ready', () => {console.log("I  am ready also ben is a cunt")})
+client.on('ready', () => {console.log("I  am ready also ben is a cunt"); console.log('Bot invite link: https://discordapp.com/oauth2/authorize?&client_id=' + config.client_id + '&scope=bot&permissions=1878522945')})
 client.on('disconnected', function () {console.log("I died wtf")})
 client.on('reconnecting', () => console.log('I am reconnecting now!'))
 client.on('guildCreate', guild => {console.log("I joined a server")})
@@ -41,13 +41,17 @@ client.on('message', async message => {
     const m = await message.channel.send('One second...')
     m.edit('It took ` ' + (m.createdTimestamp - message.createdTimestamp) + ' ms ` to ping ' + ranQuote + '\nAlso, the API latency is `' + Math.round(client.ping) + ' ms`')
   }
+
+  if (command === 'bot-invite') {
+    message.delete()
+    message.author.send('Bot invite link: https://discordapp.com/oauth2/authorize?&client_id=' + config.client_id + '&scope=bot&permissions=1878522945')
+  }
 })
 
 if (config.token) {
 	// Log whats happening.
   console.log('-------------')
   console.log('Trying to log in with token...')
-  hook.send('Trying to log in with token...')
   client.login(config.token)
 } else {
 	// Only will happpen is error. This should only happen if the error is you dont have a bot token.
