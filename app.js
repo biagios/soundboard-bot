@@ -56,7 +56,7 @@ client.on('message', async message => {
     let dispatcher
     if (message.member.voiceChannel) {
       message.member.voiceChannel.join()
-      dispatcher = message.member.voiceChannel.playFile('/audio/airhorn.mp3')
+      dispatcher = connection.playFile('/audio/airhorn.mp3')
       dispatcher.on('error', e => {console.log(e);})
       dispatcher.on('end', () => {message.member.voiceChannel.leave()});
     } else {
