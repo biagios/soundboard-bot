@@ -20,12 +20,8 @@ setInterval(function () {
   client.user.setGame(rangame)
 }, 60000 * 5)
 
-client.on('ready', () => {console.log("I  am ready."); console.log('Bot invite link: https://discordapp.com/oauth2/authorize?&client_id=' + config.client_id + '&scope=bot&permissions=1878522945')})
 client.on('disconnected', function () {console.log("Mission failed, I'll get them next time.")})
-=======
 client.on('ready', () => {console.log("I am ready."); console.log('Bot invite link: https://discordapp.com/oauth2/authorize?&client_id=' + config.client_id + '&scope=bot&permissions=1878522945')})
-client.on('disconnected', function () {console.log("I died wtf")})
->>>>>>> d0f22771c251ae5c8adc24da671cdcd6323b0811
 client.on('reconnecting', () => console.log('I am reconnecting now!'))
 client.on('guildCreate', guild => {console.log("I joined a server")})
 client.on('guildDelete', guild => {console.log("I left a server")})
