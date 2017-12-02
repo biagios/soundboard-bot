@@ -55,14 +55,15 @@ client.on('message', async message => {
   if (command === 'fuck'){
     let dispatcher
     if (message.member.voiceChannel) {
-      message.member.voiceChannel.join()
-      dispatcher = message.guild.voiceConnection.playFile('/audio/airhorn.mp3')
+      message.member.voiceChannel.join().then(connection => {
+      dispatcher = connection.playFile('/audio/airhorn.mp3')
       dispatcher.on('error', e => {console.log(e);})
       dispatcher.on('end', () => {message.member.voiceChannel.leave()});
     } else {
       message.reply('You need to join a voice channel first!');
     }
   }
+}
 
 })
 
