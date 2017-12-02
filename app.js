@@ -57,7 +57,7 @@ client.on('message', async message => {
     if (message.member.voiceChannel) {
       message.member.voiceChannel.join().then(connection => {
       airhorn = connection
-      const dispatcher = airhorn.playFile('/audio/airhorn.mp3')
+      const dispatcher = airhorn.playFile('./audio/airhorn.mp3')
       dispatcher.on('error', e => {console.log(e);})
       dispatcher.on('end', () => {message.member.voiceChannel.leave()});
     })
