@@ -1,4 +1,3 @@
-// Load up the discord.js library. Else throw an error.
 try {
   var Discord = require('discord.js')
   if (process.version.slice(1).split('.')[0] < 8) {
@@ -32,3 +31,20 @@ client.on('disconnected', function () {eventCall.disconnected(hook)})
 client.on('reconnecting', () => console.log('I am reconnecting now!'))
 client.on('guildCreate', guild => {eventCall.joinedGuild(hook, guild)})
 client.on('guildDelete', guild => {eventCall.leftGuild(hook, guild)})
+
+client.on('message', async message => {
+  if (message.author.bot) return
+  let args = message.content.slice(config.prefix.length).trim().split(/ +/g)
+  const command = args.shift().toLowerCase()
+  let content = message.content.toLowerCase()
+  if (talkedRecently.has(message.author.id)) {return}
+  talkedRecently.add(message.author.id)
+  setTimeout(() => {talkedRecently.delete(message.author.id)}, 2500)
+
+  if (command === 'ping') {
+    const pings = ['the moon', 'europe', 'oceania', 'Trump', 'a baguette', 'pizza', 'the netherlands', 'September 11th, 2001', 'digital ocean', 'the BBC', 'my mother', 'Mr. Meeseeks', "pewdipie's firewatch stream", 'uncensored hentai. :warning: `not found`', 'Julian Assange', 'african food supplies, jk']
+    const ranQuote = pings[Math.floor(Math.random() * pings.length)]
+    const m = await message.channel.send('One second...')
+    m.edit('It took ` ' + (m.createdTimestamp - message.createdTimestamp) + ' ms ` to ping ' + ranQuote + '\nAlso, the API latency is `' + Math.round(client.ping) + ' ms`')
+  }
+})
