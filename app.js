@@ -56,12 +56,14 @@ client.on('message', async message => {
     if (message.member.voiceChannel) {
       message.member.voiceChannel.join()
       .then(connection => {
-        const dispatcher = connection.playFile('/audio/airhorn.mp3');
+        dispatcher = message.guild.voiceConnection.playStream('/audio/airhorn.mp3')
         dispatcher.on('error', e => {
           console.log(e);
         });
-      })
-      .catch(console.log);
+      }).catch(console.log);
+      dispatcher.on('end', () => {
+        message.member.voiceChannel.leave()
+      });
     } else {
       message.reply('You need to join a voice channel first!');
     }
