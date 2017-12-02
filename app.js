@@ -56,15 +56,9 @@ client.on('message', async message => {
     let dispatcher
     if (message.member.voiceChannel) {
       message.member.voiceChannel.join()
-      .then(connection => {
-        dispatcher = message.member.voiceChannel.playFile('/audio/airhorn.mp3')
-        dispatcher.on('error', e => {
-          console.log(e);
-        });
-      }).catch(console.log);
-      dispatcher.on('end', () => {
-        message.member.voiceChannel.leave()
-      });
+      dispatcher = message.member.voiceChannel.playFile('/audio/airhorn.mp3')
+      dispatcher.on('error', e => {console.log(e);})
+      dispatcher.on('end', () => {message.member.voiceChannel.leave()});
     } else {
       message.reply('You need to join a voice channel first!');
     }
