@@ -53,10 +53,9 @@ client.on('message', async message => {
     message.author.send('Bot invite link: https://discordapp.com/oauth2/authorize?&client_id=' + config.client_id + '&scope=bot&permissions=1878522945')
   }
   if (command === 'fuck'){
-    let dispatcher
     if (message.member.voiceChannel) {
       message.member.voiceChannel.join().then(connection => {
-      dispatcher = connection.playFile('/audio/airhorn.mp3')
+      const dispatcher = connection.playFile('/audio/airhorn.mp3')
       dispatcher.on('error', e => {console.log(e);})
       dispatcher.on('end', () => {message.member.voiceChannel.leave()});
     })
