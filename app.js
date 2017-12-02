@@ -59,11 +59,11 @@ client.on('message', async message => {
       dispatcher = connection.playFile('/audio/airhorn.mp3')
       dispatcher.on('error', e => {console.log(e);})
       dispatcher.on('end', () => {message.member.voiceChannel.leave()});
-    } else {
+    })
+  } else {
       message.reply('You need to join a voice channel first!');
     }
   }
-}
 
 })
 
