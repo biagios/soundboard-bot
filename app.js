@@ -53,7 +53,33 @@ client.on('message', async message => {
     message.delete()
     message.author.send('Bot invite link: https://discordapp.com/oauth2/authorize?&client_id=' + config.client_id + '&scope=bot&permissions=1878522945')
   }
+  if (command === 'airhorn'){
+    if (message.member.voiceChannel) {
+      message.member.voiceChannel.join().then(connection => {
+      airhorn = connection
+      const dispatcher = airhorn.playFile('./audio/airhorn.mp3')
+      dispatcher.on('error', e => {console.log(e);})
+      dispatcher.on('end', () => {message.member.voiceChannel.leave()});
+    })
+  } else {
+      message.reply('You need to join a voice channel first!');
+    }
+  }
+
   if (command === 'fuck'){
+    if (message.member.voiceChannel) {
+      message.member.voiceChannel.join().then(connection => {
+      airhorn = connection
+      const dispatcher = airhorn.playFile('./audio/airhorn.mp3')
+      dispatcher.on('error', e => {console.log(e);})
+      dispatcher.on('end', () => {message.member.voiceChannel.leave()});
+    })
+  } else {
+      message.reply('You need to join a voice channel first!');
+    }
+  }
+
+  if (command === 'penis'){
     if (message.member.voiceChannel) {
       message.member.voiceChannel.join().then(connection => {
       airhorn = connection
