@@ -1,105 +1,107 @@
-try {
-  var Discord = require('discord.js')
-  if (process.version.slice(1).split('.')[0] < 8) {
-    throw new Error('Node 8.0.0 or higher is required. Please upgrade / update Node.js on your computer / server.')
-  }
-} catch (e) {
-  console.error(e.stack)
-  console.error('Current Node.js version: ' + process.version)
-  console.error("In case you´ve not installed any required module: \nPlease run 'npm install' and ensure it passes with no errors!")
-  process.exit()
-}
-
+var Discord = require('discord.js')
 const client = new Discord.Client()
 const talkedRecently = new Set()
-const config = require('./config.json')
+const config = require('./private/config.json')
 var airhorn
 
-const games = ['with Dr. Freeman', 'Half Life 3', config.prefix + 'help', 'please send ' + config.prefix + 'help', 'with a baguette', 'with you ;)', 'with [slem], he is cool', 'with some code', 'with like 2 people idfk man', 'i am not funny', '🤔 🔫  ', 'stop using other bots.', 'Stop using mee6 and actually right clikc and ban people you lazy fuck', 'Litteraly the best bot out there.', 'gradientforest.com', 'sleme.github.com/porn', 'pineappledoesnotgoonpizza.com', `Okay, let's get this straight. If you put pineapple on your pizza you deserve to be punished.`, `STOP PUTTING PINEAPPLE ON PIZZA`, `I didn't think I would neeed to uh, touch on this subject or even mention it. I obviously don't want to touch on sensitive subjects, politics, social movements or religion, but this has gone too far. Please uhh, take it as a life lesson.`]
-setInterval(function () {
-  const rangame = games[Math.floor(Math.random() * games.length)]
-  client.user.setGame(rangame)
-}, 60000 * 5)
-
-client.on('disconnected', function () {console.log("Mission failed, I'll get them next time.")})
-client.on('ready', () => {console.log("I am ready."); console.log('Bot invite link: https://discordapp.com/oauth2/authorize?&client_id=' + config.client_id + '&scope=bot&permissions=1878522945')})
-client.on('reconnecting', () => console.log('I am reconnecting now!'))
-client.on('guildCreate', guild => {console.log("I joined a server")})
-client.on('guildDelete', guild => {console.log("I left a server")})
+client.on('warn', console.warn)
+client.on('error', console.error)
+client.on('disconnected', function () {console.error('Disconnected!')})
+client.on('reconnecting', () => console.log('Reconnecting'))
+client.on('ready', () => {
+  console.log(`Logged in as ${config.name}!`);
+  console.log('Node version: ' + process.version + '\nDiscord.js version: ' + Discord.version)
+  client.user.setActivity('Use s!info to understand what I do!')
+});
 
 client.on('message', async message => {
   if (message.author.bot) return
   let args = message.content.slice(config.prefix.length).trim().split(/ +/g)
   const command = args.shift().toLowerCase()
   let content = message.content.toLowerCase()
+  let sContentArgs = message.content.trim().split(/ +/g)
+  let sContentCommand = sContentArgs.shift().toLowerCase()
   if (talkedRecently.has(message.author.id)) {return}
   talkedRecently.add(message.author.id)
   setTimeout(() => {talkedRecently.delete(message.author.id)}, 2500)
+  if (message.author.bot) return
+  if (message.content.indexOf(config.prefix) !== 0) return
+  console.log('Recived ' + message.content + ' from ' + message.author)
 
   if (command === 'ping') {
-    const pings = ['the moon', 'europe', 'oceania', 'Trump', 'a baguette', 'pizza', 'the netherlands', 'September 11th, 2001', 'digital ocean', 'the BBC', 'my mother', 'Mr. Meeseeks', "pewdipie's firewatch stream", 'uncensored hentai. :warning: `not found`', 'Julian Assange', 'african food supplies, jk']
-    const ranQuote = pings[Math.floor(Math.random() * pings.length)]
-    const m = await message.channel.send('One second...')
-    m.edit('It took ` ' + (m.createdTimestamp - message.createdTimestamp) + ' ms ` to ping ' + ranQuote + '\nAlso, the API latency is `' + Math.round(client.ping) + ' ms`')
-  }
-
-  if (command === 'setgame') {
-    const game = args.join(' ')
-    message.delete().catch(O_o => {})
-    client.user.setGame(game)
+    message.channel.startTyping()
+    const m = await message.channel.send('Calculating...')
+    m.edit(':ping_pong:' + (m.createdTimestamp - message.createdTimestamp) + ' ms')
+    message.channel.stopTyping()
   }
 
   if (command === 'bot-invite') {
     message.delete()
-    message.author.send('Bot invite link: https://discordapp.com/oauth2/authorize?&client_id=' + config.client_id + '&scope=bot&permissions=1878522945')
+    message.author.send('Bot invite link: https://discordapp.com/oauth2/authorize?&client_id=' + config.client_id + '&scope=bot&permissions=36809792')
   }
+
   if (command === 'airhorn'){
+    message.delete()
     if (message.member.voiceChannel) {
-      message.member.voiceChannel.join().then(connection => {
-      airhorn = connection
-      const dispatcher = airhorn.playFile('./audio/airhorn.mp3')
-      dispatcher.on('error', e => {console.log(e);})
-      dispatcher.on('end', () => {message.member.voiceChannel.leave()});
-    })
-  } else {
+      message.member.voiceChannel.join()
+      .then(connection => {
+        const dispatcher = connection.playFile('./audio/airhorn.mp3');
+        dispatcher.on('end', () => {message.member.voiceChannel.leave()});
+        dispatcher.on('error', e => {console.error(e);});
+      })
+      .catch(console.error);
+    } else {
       message.reply('You need to join a voice channel first!');
     }
   }
 
-  if (command === 'fuck'){
+  if (command === 'smiley'){
+    message.delete()
     if (message.member.voiceChannel) {
-      message.member.voiceChannel.join().then(connection => {
-      airhorn = connection
-      const dispatcher = airhorn.playFile('./audio/airhorn.mp3')
-      dispatcher.on('error', e => {console.log(e);})
-      dispatcher.on('end', () => {message.member.voiceChannel.leave()});
-    })
-  } else {
+      message.member.voiceChannel.join()
+      .then(connection => {
+        const dispatcher = connection.playFile('./audio/smiley.mp3');
+        dispatcher.on('end', () => {message.member.voiceChannel.leave()});
+        dispatcher.on('error', e => {console.error(e);});
+      })
+      .catch(console.error);
+    } else {
       message.reply('You need to join a voice channel first!');
     }
   }
 
-  if (command === 'penis'){
-    if (message.member.voiceChannel) {
-      message.member.voiceChannel.join().then(connection => {
-      airhorn = connection
-      const dispatcher = airhorn.playFile('./audio/airhorn.mp3')
-      dispatcher.on('error', e => {console.log(e);})
-      dispatcher.on('end', () => {message.member.voiceChannel.leave()});
-    })
-  } else {
-      message.reply('You need to join a voice channel first!');
-    }
+  if (command === 'info'){
+    message.delete()
+    message.author.send(
+      {
+        "embed": {
+          "title": "Sound-Bot has a list of various sounds you can play in voice chats with friends.",
+          "description": "Use s!play followed by the name of the sound, here is a list of sounds:",
+          "footer": {
+            "text": "© Midday Clouds"
+          },
+          "fields": [
+            {
+              "name": "soundhorn",
+              "value": "Plays the classic meme horn.",
+              "inline": true
+            },
+            {
+              "name": "smiley",
+              "value": "Plays a well known SwaggerSouls line.",
+              "inline": true
+            }
+          ]
+        }
+      }
+    )
   }
+
 
 })
 
 if (config.token) {
-	// Log whats happening.
-  console.log('-------------')
-  console.log('Trying to log in with token...')
   client.login(config.token)
 } else {
-	// Only will happpen is error. This should only happen if the error is you dont have a bot token.
-  console.log('Bot token not found! Remember you cant log in with credentials anymore.')
+  console.error('Bot token not found!')
 }
